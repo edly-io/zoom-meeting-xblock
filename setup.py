@@ -3,7 +3,12 @@
 
 import os
 
+from pathlib import Path
 from setuptools import setup
+
+
+this_directory = Path(__file__).parent
+long_description = (this_directory / "README.md").read_text()
 
 
 def package_data(pkg, roots):
@@ -25,8 +30,14 @@ def package_data(pkg, roots):
 setup(
     name='zoom_meeting-xblock',
     version='0.1',
-    description='zoom_meeting XBlock',   # TODO: write a better description.
-    license='UNKNOWN',          # TODO: choose a license: 'AGPL v3' and 'Apache 2.0' are popular.
+    description='XBlock to use Zoom Meeting.',
+    long_description=long_description,
+    long_description_content_type='text/markdown',
+    url='https://github.com/edly-io/zoom-meeting-xblock',
+    license='MIT',
+    author='edly',
+    author_email='hello@edly.io',
+    keywords='python edx zoom meeting xblock',
     packages=[
         'zoom_meeting',
     ],

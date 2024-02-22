@@ -11,27 +11,32 @@ function ZoomMeetingXBlock(runtime, element, config) {
         patchJsMedia: true,
       })
       .then(() => {
-        client
-          .join({
-            signature: config.signature,
-            sdkKey: config.sdk_key,
-            meetingNumber: config.meeting_number,
-            password: config.password,
-            userName: config.user_name,
-            userEmail: config.user_email,
-            tk: config.registrant_token,
-            zak: config.zak_token,
-          })
-          .then(() => {
-            console.log("Joined Meeting Successfully");
-          })
-          .catch((error) => {
-            console.log(error);
-          });
+        client.join({
+          signature: config.signature,
+          sdkKey: config.sdk_key,
+          meetingNumber: config.meeting_number,
+          password: config.password,
+          userName: config.user_name,
+          userEmail: config.user_email,
+          tk: config.registrant_token,
+          zak: config.zak_token,
+        });
       })
       .catch((error) => {
-        console.log(error);
+        displayError(error);
       });
+  }
+
+  function displayError(error) {
+    var errorDiv = document.createElement("div");
+
+    if (error && typeof error === "object" && "reason" in error) {
+      const reason = error.reason;
+      errorDiv.innerHTML = `<p style="color: red; text-align: center;">Error: ${reason}</p>`;
+    } else if (typeof error === "string") {
+      errorDiv.innerHTML = `<p style="color: red; text-align: center;">Error: ${error}</p>`;
+    }
+    document.body.appendChild(errorDiv);
   }
 
   function getOrCreateMeetingDiv() {
