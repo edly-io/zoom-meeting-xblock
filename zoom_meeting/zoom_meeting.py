@@ -8,46 +8,52 @@ import pkg_resources
 from django.conf import settings
 
 from web_fragments.fragment import Fragment
+from xblock.completable import CompletableXBlockMixin
 from xblock.core import XBlock
 from xblock.fields import Scope, String
+from xblockutils.studio_editable import StudioEditableXBlockMixin
 
 log = logging.getLogger(__name__)
 
 TOKEN_EXPIRE_TIME = 60 * 60 * 3
 
 
+def _(text): return text
+
+
 @XBlock.wants("user")
-class ZoomMeetingXBlock(XBlock):
+@XBlock.wants('i18n')
+class ZoomMeetingXBlock(XBlock, StudioEditableXBlockMixin, CompletableXBlockMixin):
     """
     Zoom Meeting component XBlock.
     """
 
     sdk_key = String(
-        display_name="SDK KEY OR CLIENT ID",
+        display_name=_('SDK KEY OR CLIENT ID'),
         default=getattr(settings, "ZOOM_MEETING_SDK_KEY", None),
         scope=Scope.settings,
-        help="Zoom sdk key OR Client Id",
+        help=_("Zoom sdk key OR Client Id"),
     )
     sdk_secret = String(
-        display_name="SDK SECRET OR CLIENT SECRET",
+        display_name=_('SDK SECRET OR CLIENT SECRET'),
         default=getattr(settings, "ZOOM_MEETING_SDK_SECRET", None),
         scope=Scope.settings,
-        help="Zoom sdk Secret OR Client Secret",
+        help=_("Zoom sdk Secret OR Client Secret"),
     )
 
     meeting_number = String(
-        display_name="ZOOM MEETING NUMBER",
+        display_name=_('ZOOM MEETING NUMBER'),
         default=getattr(settings, "ZOOM_MEETING_NUMBER", None),
         scope=Scope.settings,
-        help="Zoom meeting number",
+        help=_("Zoom meeting number"),
     )
     meeting_password = String(
-        display_name="ZOOM SECURITY PASSCODE",
+        display_name=_('ZOOM SECURITY PASSCODE'),
         default=getattr(settings, "ZOOM_SECURITY_PASSCODE", None),
         scope=Scope.settings,
-        help="Zoom security passcode",
+        help=_("Zoom security passcode"),
     )
-
+    editable_fields = ['sdk_key', 'sdk_secret', 'meeting_number', 'meeting_password']
     has_author_view = True
 
     def get_congfiurations(self):
@@ -59,24 +65,24 @@ class ZoomMeetingXBlock(XBlock):
             string: The `get_congfiurations` method returns a dictionary.
         """
 
-        if user_service := self.runtime.service(self, "user"):
-            full_name = user_service.get_current_user().full_name
-        else:
-            full_name = (
-                self.runtime.service(self, "user")
-                .get_current_user()
-                .opt_attrs.get("edx-platform.username")
-            )
+        if not all([self.sdk_key, self.sdk_secret, self.meeting_number, self.meeting_password]):
+            return {"error": "Configuration value(s) missing."}
+
+        current_user = self.runtime.service(self, "user").get_current_user()
+        username = current_user.opt_attrs.get("edx-platform.username")
+        language = current_user.opt_attrs.get(
+            "edx-platform.user_preferences").get("pref-lang", "en-US")
 
         return {
             "signature": self.generate_zoom_jwt_signature(),
             "sdk_key": self.sdk_key,
             "meeting_number": self.meeting_number,
             "password": self.meeting_password,
-            "user_name": full_name,
+            "username": username,
             "user_email": "",
             "registrant_token": "",
             "zak_token": "",
+            "language": language,
         }
 
     def generate_zoom_jwt_signature(self):

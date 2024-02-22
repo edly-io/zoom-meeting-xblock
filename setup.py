@@ -28,7 +28,7 @@ def package_data(pkg, roots):
 
 
 setup(
-    name='zoom_meeting-xblock',
+    name='zoom-meeting-xblock',
     version='0.1',
     description='XBlock to use Zoom Meeting.',
     long_description=long_description,

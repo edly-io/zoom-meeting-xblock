@@ -7,7 +7,7 @@ function ZoomMeetingXBlock(runtime, element, config) {
     client
       .init({
         zoomAppRoot: meetingSDKElement,
-        language: "en-US",
+        language: config.language,
         patchJsMedia: true,
       })
       .then(() => {
@@ -16,7 +16,7 @@ function ZoomMeetingXBlock(runtime, element, config) {
           sdkKey: config.sdk_key,
           meetingNumber: config.meeting_number,
           password: config.password,
-          userName: config.user_name,
+          userName: config.username,
           userEmail: config.user_email,
           tk: config.registrant_token,
           zak: config.zak_token,
@@ -57,6 +57,9 @@ function ZoomMeetingXBlock(runtime, element, config) {
   });
 
   $(function ($) {
-    /* Here's where you'd do things on page load. */
+    if ("error" in config) {
+      $("#startZoomMeetingId").hide();
+      displayError(config.error);
+    }
   });
 }
