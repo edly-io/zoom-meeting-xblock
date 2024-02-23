@@ -30,26 +30,26 @@ class ZoomMeetingXBlock(XBlock, StudioEditableXBlockMixin, CompletableXBlockMixi
 
     sdk_key = String(
         display_name=_('SDK KEY OR CLIENT ID'),
-        default=getattr(settings, "ZOOM_MEETING_SDK_KEY", None),
+        default=None,
         scope=Scope.settings,
         help=_("Zoom sdk key OR Client Id"),
     )
     sdk_secret = String(
         display_name=_('SDK SECRET OR CLIENT SECRET'),
-        default=getattr(settings, "ZOOM_MEETING_SDK_SECRET", None),
+        default=None,
         scope=Scope.settings,
         help=_("Zoom sdk Secret OR Client Secret"),
     )
 
     meeting_number = String(
         display_name=_('ZOOM MEETING NUMBER'),
-        default=getattr(settings, "ZOOM_MEETING_NUMBER", None),
+        default=None,
         scope=Scope.settings,
         help=_("Zoom meeting number"),
     )
     meeting_password = String(
         display_name=_('ZOOM SECURITY PASSCODE'),
-        default=getattr(settings, "ZOOM_SECURITY_PASSCODE", None),
+        default=None,
         scope=Scope.settings,
         help=_("Zoom security passcode"),
     )
