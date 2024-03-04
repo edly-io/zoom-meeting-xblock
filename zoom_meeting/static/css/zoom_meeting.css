@@ -1,0 +1,27 @@
+/* CSS for ZoomMeetingXBlock */
+
+.zoom_meeting_block .count {
+    font-weight: bold;
+}
+
+.zoom_meeting_block p {
+    cursor: pointer;
+}
+
+.zoom-meeting-button {
+    border: 2px solid #0b5cff;
+    color: #0b5cff;
+    background-color: transparent;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+    margin-top: 50px;
+    display: block;
+    margin: 0 auto;/
+}
+
+.zoom-heading {
+    text-align: center;
+    color: #0b5cff;
+}
