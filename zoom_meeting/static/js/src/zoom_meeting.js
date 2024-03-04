@@ -43,7 +43,6 @@ function ZoomMeetingXBlock(runtime, element, config) {
         meetingSDKElement.attr("id", "meetingSDKElement");
         $("body").append(meetingSDKElement);
     }
-    console.log('zxaa ', meetingSDKElement)
     return meetingSDKElement[0];
 }
 
