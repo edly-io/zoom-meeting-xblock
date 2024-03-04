@@ -28,28 +28,25 @@ function ZoomMeetingXBlock(runtime, element, config) {
   }
 
   function displayError(error) {
-    var errorDiv = document.createElement("div");
-
     if (error && typeof error === "object" && "reason" in error) {
-      const reason = error.reason;
-      errorDiv.innerHTML = `<p style="color: red; text-align: center;">Error: ${reason}</p>`;
+        $('#zoomError').append(`<p style="color: red; text-align: center;">Error: ${error.reason}</p>`);
     } else if (typeof error === "string") {
-      errorDiv.innerHTML = `<p style="color: red; text-align: center;">Error: ${error}</p>`;
+        $('#zoomError').append(`<p style="color: red; text-align: center;">Error: ${error}</p>`);
     }
-    document.body.appendChild(errorDiv);
-  }
+}
 
   function getOrCreateMeetingDiv() {
-    var meetingSDKElement = document.getElementById("meetingSDKElement");
+    var meetingSDKElement = $("#meetingSDKElement");
 
-    if (!meetingSDKElement) {
-      meetingSDKElement = document.createElement("div");
-      meetingSDKElement.setAttribute("id", "meetingSDKElement");
-      document.body.appendChild(meetingSDKElement);
+    if (!meetingSDKElement.length) {
+        meetingSDKElement = $("<div></div>");
+        meetingSDKElement.attr("id", "meetingSDKElement");
+        $("body").append(meetingSDKElement);
     }
+    console.log('zxaa ', meetingSDKElement)
+    return meetingSDKElement[0];
+}
 
-    return meetingSDKElement;
-  }
 
   $("#startZoomMeetingId").click(function (eventObject) {
     $(this).hide();

@@ -103,7 +103,11 @@ class ZoomMeetingXBlock(XBlock, StudioEditableXBlockMixin, CompletableXBlockMixi
             "appKey": self.sdk_key,
             "tokenExp": exp,
         }
-        token = jwt.encode(payload, self.sdk_secret, algorithm="HS256")
+        token = jwt.encode(
+            payload,
+            self.sdk_secret,
+            algorithm=settings.JWT_AUTH.get("JWT_ALGORITHM", "HS256"),
+        )
         return token.decode("utf-8") if isinstance(token, bytes) else token
 
     def resource_string(self, path):
@@ -139,16 +143,6 @@ class ZoomMeetingXBlock(XBlock, StudioEditableXBlockMixin, CompletableXBlockMixi
     def author_view(self, context=None):
         """
         Render a static message to join a meeting from the LMS.
-        """
-        html = self.resource_string("static/html/zoom_meeting_studio.html")
-        frag = Fragment(html.format(self=self))
-        frag.add_css(self.resource_string("static/css/zoom_meeting.css"))
-        return frag
-
-    def staff_view(self, context=None):
-        """
-        The primary view of the ZoomMeetingXBlock, shown to staff
-        when viewing studio.
         """
         html = self.resource_string("static/html/zoom_meeting_studio.html")
         frag = Fragment(html.format(self=self))
